@@ -25,7 +25,7 @@ class PlayerTest(unittest.TestCase):
 		current_hand = player.list_of_hands[0]
 
 		current_hand.cards.append(10)
-		current_hand.cards.append(10)
+		current_hand.cards.append(9)
 
 		player.money = 5000
 		
@@ -38,15 +38,19 @@ class PlayerTest(unittest.TestCase):
 
 
 	def test_split(self):
-		player = black_jack_classes.Player()
+		player2 = black_jack_classes.Player()
+		player2.money = 3000
 
-		old_hand = black_jack_classes.Hand()
+		player2.list_of_hands.append(black_jack_classes.Hand())
+		old_hand = player2.list_of_hands[0]
 		old_hand.cards = [8,8]
+		old_hand.bet = 500
 		new_hands_touple = {8,8}
 
-		func_output = player.split(old_hand)
+		func_output = player2.split(old_hand)
 
 		self.assertEqual(func_output, new_hands_touple)
+		self.assertEqual(len(player2.list_of_hands), 2)
 
 if __name__ == '__main__':
 	unittest.main()

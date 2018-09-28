@@ -36,12 +36,31 @@ class Hand():
 	
 	"""
 
-	cards = []
+	def __init__(self):
+		self.cards = []
 
-	points = 0
-	is_busted = False
-	bet = 0
-	only_one_hit = False
+		self.points = 0
+		self.is_busted = False
+		self.bet = 0
+		self.only_one_hit = False
+
+	def __str__(self):
+
+		cards_str = str(self.cards)
+		points_str = str(self.points)
+		is_busted_str = str(self.is_busted)
+		bet_str = str(self.bet)
+		one_hit_str = str(self.only_one_hit)
+
+		print("CARDS : " + cards_str)
+		print("POINTS : " + points_str)
+		print("IS_BUSTED :" + is_busted_str)
+		print("BET : " + bet_str)
+		print("ONE_HIT : " + one_hit_str)
+
+		return ''
+
+
 
 	
 
@@ -61,19 +80,15 @@ class GameParticipant():
 
 	"""
 
-	is_busted = False
-	list_of_hands = []
-
 	
 
-	def initial_bet(self, bet):
-		if bet > Player.money : 
-			print ( " Well, you can't bet this much money")
-			return False
+	def __init__(self):
 
+		self.is_busted = False
+		self.list_of_hands = []
+	
 
-		Player.money = Player.money - bet
-		return bet
+	
 
 
 	def stand(self):
@@ -87,7 +102,17 @@ class GameParticipant():
 
 class Player(GameParticipant):
 
+
+
 	money = 0 # players avaliable money in game
+
+	def initial_bet(self, bet):
+		if bet > Player.money : 
+			print ( " Well, you can't bet this much money")
+			return False
+
+
+		self.money = self.money - bet
 
 	def double_down(self, hand):
 		"""
@@ -101,7 +126,7 @@ class Player(GameParticipant):
 		"""
 
 		hand.bet = hand.bet*2
-		Player.money = Player.money - hand.bet
+		self.money = self.money - hand.bet
 
 		return hand.bet
 
@@ -117,16 +142,25 @@ class Player(GameParticipant):
 		if not len(hand.cards)  == 2 :
 
 			print("Error, It might be an exception here !")
+			return False
 
-		if hand.bet > Player.money:
+		if hand.bet > self.money:
 
 			print("You don't have enough money !")
+			return False
+
+		
+		#print(self.list_of_hands[1])
+
 
 		new_hand = Hand()
 		new_hand.cards.append(hand.cards[0])
+		new_hand.bet = hand.bet
+		self.money = self.money - hand.bet
 		hand.cards.pop(0)
-		Player.list_of_hands.append(new_hand) # LEN list of hands
+		self.list_of_hands.append(new_hand) # LEN list of hands
 
-		return {new_hand.cards[0],hand.cards[0]}
+
+		return {self.list_of_hands[0].cards[0], self.list_of_hands[1].cards[0]}
 
 
