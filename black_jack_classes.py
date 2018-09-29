@@ -100,14 +100,43 @@ class GameParticipant():
 	def take_card(self,hand):
 		pass
 
+	def get_initial_hand(self,deck): ####### NEED TO BE TESTED
+		self.list_of_hands.append(Hand())
+		initial_hand = self.list_of_hands[0]
+		self.hit(initial_hand,deck)
+		self.hit(initial_hand,deck)
+
+	def croupier_move()
+
 class Player(GameParticipant):
 
+	def make_move(self, hand,deck): ####### NEED TO BE TESTED 
+		move = input("")
+
+		player_possible_moves = {
+
+			'stay' : self.stay(),
+			'hit' : self.hit(hand,deck),
+			'double down' : self.double_down(hand),
+			'split': self.split(hand)
+	
+
+
+			}
+
+		while True:
+			try:
+				player_possible_moves[move]
+
+
+			except:
+				print("There is something wrong ! Try again...") 
 
 
 	money = 0 # players avaliable money in game
 
 	def initial_bet(self, bet):
-		if bet > Player.money : 
+		if bet > self.money : 
 			print ( " Well, you can't bet this much money")
 			return False
 
