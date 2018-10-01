@@ -5,6 +5,7 @@
 
 
 import random
+from bj_exceptions import MovementFail 
 
 class Deck():
 
@@ -95,7 +96,13 @@ class GameParticipant():
 		pass
 
 	def hit(self, hand, deck):
+		if hand.only_one_hit and len(hand.cards) > 2 : 
+			raise MovementFail('You could hit only once !!') # can I just return this exception ? 
+			return False
+
+
 		hand.cards.append(deck.pop_top_card())
+		return True
 
 	def take_card(self,hand):
 		pass
@@ -106,9 +113,23 @@ class GameParticipant():
 		self.hit(initial_hand,deck)
 		self.hit(initial_hand,deck)
 
-	def croupier_move()
+	def croupier_move(self,hand,deck):
+		while self.hand.points < 17 :
+			self.hit(hand,deck)
+			if self.points > 21 :
+				self.is_busted = True
+				return False
+
+		self.stay()
+		return True
+
+		
 
 class Player(GameParticipant):
+
+	self.money = 10000 # experiment !!! 
+
+
 
 	def make_move(self, hand,deck): ####### NEED TO BE TESTED 
 		move = input("")
@@ -124,16 +145,18 @@ class Player(GameParticipant):
 
 			}
 
-		while True:
-			try:
-				player_possible_moves[move]
+		while not move == 'stay':
+			while True :
+				try:
+					player_possible_moves[move]
+					break
 
 
-			except:
-				print("There is something wrong ! Try again...") 
+				except MovementFail:
+					print("There is something wrong ! Try again...") 
 
 
-	money = 0 # players avaliable money in game
+	
 
 	def initial_bet(self, bet):
 		if bet > self.money : 
@@ -154,8 +177,13 @@ class Player(GameParticipant):
 		OUTPUT: Amount of money after double
 		"""
 
+		if not len(hand.cards) == 2 :
+			raise MovementFail("you can't double with more than 2 cards !")
+			return False #?? Will it run ?
+
 		hand.bet = hand.bet*2
 		self.money = self.money - hand.bet
+		hand.only_one_hit = True
 
 		return hand.bet
 
@@ -191,5 +219,17 @@ class Player(GameParticipant):
 
 
 		return {self.list_of_hands[0].cards[0], self.list_of_hands[1].cards[0]}
+
+
+
+
+		# Need to know : 
+			# can I return an exception ? 
+			# can I define self.money out of __init__ and it will be specific objec value ? 
+
+		# Need to be tested : 
+			# make_move
+			# get_initial_hand
+			# all of that exceptions and my new one 
 
 
