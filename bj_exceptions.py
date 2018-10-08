@@ -3,7 +3,7 @@
 
 #file created : 14:00 | 01.10.18 
 
-class MovementFail(Exceptions) :
+class MovementFail(Exception) :
 	def __init__(self,msg):
 		self.msg=msg
 

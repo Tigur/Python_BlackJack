@@ -113,7 +113,7 @@ class GameParticipant():
 		self.hit(initial_hand,deck)
 		self.hit(initial_hand,deck)
 
-	def croupier_move(self,hand,deck):
+	def make_move(self,hand,deck):
 		while self.hand.points < 17 :
 			self.hit(hand,deck)
 			if self.points > 21 :
@@ -127,33 +127,39 @@ class GameParticipant():
 
 class Player(GameParticipant):
 
-	self.money = 10000 # experiment !!! 
+	def __init__(self):
+		self.money = 10000 
+		self.is_busted = False
+		self.list_of_hands = []
+	 
 
 
 
 	def make_move(self, hand,deck): ####### NEED TO BE TESTED 
-		move = input("")
+		move = None
 
 		player_possible_moves = {
 
-			'stay' : self.stay(),
-			'hit' : self.hit(hand,deck),
-			'double down' : self.double_down(hand),
-			'split': self.split(hand)
+			'stand' : 1,# self.stand(),
+			'hit' : 2,# self.hit(hand,deck),
+			'double down' : 3,# self.double_down(hand),
+			'split': 4# self.split(hand)
 	
 
 
 			}
 
-		while not move == 'stay':
+		while not move == 'stand':
 			while True :
+				move = input("")
 				try:
 					player_possible_moves[move]
 					break
 
 
-				except MovementFail:
+				except KeyError:
 					print("There is something wrong ! Try again...") 
+					continue
 
 
 	
@@ -176,7 +182,8 @@ class Player(GameParticipant):
 		INPUT: hand to double
 		OUTPUT: Amount of money after double
 		"""
-
+		print("DOUBLE_DOWN !!!!!!!!!!!!!")
+		print(hand)
 		if not len(hand.cards) == 2 :
 			raise MovementFail("you can't double with more than 2 cards !")
 			return False #?? Will it run ?

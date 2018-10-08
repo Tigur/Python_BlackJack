@@ -52,6 +52,19 @@ class PlayerTest(unittest.TestCase):
 		self.assertEqual(func_output, new_hands_touple)
 		self.assertEqual(len(player2.list_of_hands), 2)
 
+	def test_make_move(self):
+		player = black_jack_classes.Player()
+		player.list_of_hands.append(black_jack_classes.Hand())
+		hand = player.list_of_hands[0]
+		#print(hand)
+		deck = black_jack_classes.Deck()
+		hand.cards = [8,8]
+
+		print(hand)
+
+		print("TEST MAKE MOVE ")
+		func_output = player.make_move(hand,deck)
+
 if __name__ == '__main__':
 	unittest.main()
 
