@@ -136,14 +136,14 @@ class Player(GameParticipant):
 
 
 	def make_move(self, hand,deck): ####### NEED TO BE TESTED 
-		move = None
+		move = None # move place_holder (choosing)
 
 		player_possible_moves = {
 
-			'stand' : 1,# self.stand(),
-			'hit' : 2,# self.hit(hand,deck),
-			'double down' : 3,# self.double_down(hand),
-			'split': 4# self.split(hand)
+			'stand' :  self.stand(),
+			'hit' :  self.hit(hand,deck),
+			'double down' :  self.double_down(hand),
+			'split':  self.split(hand)
 	
 
 
