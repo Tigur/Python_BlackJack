@@ -9,12 +9,15 @@ from bj_exceptions import MovementFail
 
 class Deck():
 
-	possible_figures = [2,3,4,5,6,7,8,9,10,'J','D','K','A']
-	cards = possible_figures*4
+
+
+	def __init__(self):
+		self.possible_figures = [2,3,4,5,6,7,8,9,10,'J','D','K','A']
+		self.cards = self.possible_figures*4
 
 
 	def shuffle(self):
-		random.shuffle(Deck.cards)
+		random.shuffle(self.cards)
 
 	def pop_top_card(self):
 		"""
@@ -24,8 +27,8 @@ class Deck():
 		Function deletes returned card from deck.
 		"""
 
-		top_card = Deck.cards[0]
-		Deck.cards.pop(0)
+		top_card = self.cards[0]
+		self.cards.pop(0)
 		return top_card
 
 
@@ -43,7 +46,7 @@ class Hand():
 		self.points = 0
 		self.is_busted = False
 		self.bet = 0
-		self.only_one_hit = False
+		self.hit_limit_on = False
 
 	def __str__(self):
 
@@ -51,13 +54,13 @@ class Hand():
 		points_str = str(self.points)
 		is_busted_str = str(self.is_busted)
 		bet_str = str(self.bet)
-		one_hit_str = str(self.only_one_hit)
+		hit_limit_str = str(self.hit_limit_on)
 
 		print("CARDS : " + cards_str)
 		print("POINTS : " + points_str)
 		print("IS_BUSTED :" + is_busted_str)
 		print("BET : " + bet_str)
-		print("ONE_HIT : " + one_hit_str)
+		print("HIT_LIMIT : " + hit_limit_str)
 
 		return ''
 
@@ -96,7 +99,7 @@ class GameParticipant():
 		pass
 
 	def hit(self, hand, deck):
-		if hand.only_one_hit and len(hand.cards) > 2 : 
+		if hand.hit_limit_on and len(hand.cards) > 2 : 
 			raise MovementFail('You could hit only once !!') # can I just return this exception ? 
 			return False
 
@@ -104,8 +107,7 @@ class GameParticipant():
 		hand.cards.append(deck.pop_top_card())
 		return True
 
-	def take_card(self,hand):
-		pass
+	
 
 	def get_initial_hand(self,deck): ####### NEED TO BE TESTED
 		self.list_of_hands.append(Hand())
@@ -113,10 +115,10 @@ class GameParticipant():
 		self.hit(initial_hand,deck)
 		self.hit(initial_hand,deck)
 
-	def make_move(self,hand,deck):
-		while self.hand.points < 17 :
+	def make_move(self, deck, hand):
+		while hand.points < 17 :
 			self.hit(hand,deck)
-			if self.points > 21 :
+			if hand.points > 21 :
 				self.is_busted = True
 				return False
 
@@ -135,32 +137,7 @@ class Player(GameParticipant):
 
 
 
-	def make_move(self, hand,deck): ####### NEED TO BE TESTED 
-		move = None # move place_holder (choosing)
-
-		player_possible_moves = {
-
-			'stand' :  self.stand(),
-			'hit' :  self.hit(hand,deck),
-			'double down' :  self.double_down(hand),
-			'split':  self.split(hand)
 	
-
-
-			}
-
-		while not move == 'stand':
-			while True :
-				move = input("")
-				try:
-					player_possible_moves[move]
-					break
-
-
-				except KeyError:
-					print("There is something wrong ! Try again...") 
-					continue
-
 
 	
 
@@ -190,7 +167,7 @@ class Player(GameParticipant):
 
 		hand.bet = hand.bet*2
 		self.money = self.money - hand.bet
-		hand.only_one_hit = True
+		hand.hit_limit_on = True
 
 		return hand.bet
 
@@ -228,15 +205,61 @@ class Player(GameParticipant):
 		return {self.list_of_hands[0].cards[0], self.list_of_hands[1].cards[0]}
 
 
+		def execute_move(self, choosen_move, hand, deck ):
+			if choosen_move == "hit":
+				hit(hand, deck)
+				return True
+			if choosen_move == "double down" :
+				double_down(hand)
+				return True
+			if choosen_move == "split" :
+				split(hand)
+				return True
+
+			return False
+
+
+		def make_move(self, deck, hand): ####### NEED TO BE TESTED 
+			move_str = None # move place_holder (choosing)
+
+			player_possible_moves = {
+
+				'stand' :  stand,
+				'hit' :  hit,
+				'double down' :  double_down,
+				'split':  split
+		
+
+
+				}
+
+			while not move_str == 'stand':
+				while True :
+					move_str = input("")
+					try:
+						self.execute_move(move_str,hand, deck)
+						break
+
+
+					except MovementFail:
+						print("There is something wrong ! Try again...") 
+						continue
+
+
+
 
 
 		# Need to know : 
-			# can I return an exception ? 
-			# can I define self.money out of __init__ and it will be specific objec value ? 
+			# can I return an exception ? It can be catched out of func 
+			# can I define self.money out of __init__ and it will be specific objec value ? NOPE
 
 		# Need to be tested : 
 			# make_move
 			# get_initial_hand
 			# all of that exceptions and my new one 
 
+
+		# features : 
+			# Deck shouldn't be passed
+			#
 

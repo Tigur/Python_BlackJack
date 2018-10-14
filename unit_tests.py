@@ -6,7 +6,36 @@
 import unittest
 import black_jack_classes
 
+
+def check_if_shuffled(deck):
+	model_deck = black_jack_classes.Deck()
+	i = 0
+	is_different = False
+	for card in deck.cards:
+		if model_deck.cards[i] != card :
+			is_different = True
+			break
+		i+=1
+
+	if i<26 :
+		print("probably shuffled ! ")
+		return True
+
+	else : 
+		print("Probably not shuffled. Check again ! ")
+		return False
+
+
+
 class DeckTest(unittest.TestCase):
+
+	def test_cards_range(self):
+		deck = black_jack_classes.Deck()
+		func_output = len(deck.cards)
+
+		print ("LENGTH OF CARDS : {} \n".format(func_output) )
+
+		self. assertEqual(func_output, 52 )
 
 	def test_poping_deck(self):
 		deck = black_jack_classes.Deck()
@@ -16,8 +45,17 @@ class DeckTest(unittest.TestCase):
 		self.assertEqual(func_output, card_popped)
 
 
+	def test_shuffle(self):
+		deck = black_jack_classes.Deck()
+		deck.shuffle()
+		check_if_shuffled(deck)
+		self.assertEqual(check_if_shuffled(deck), True)
+
 
 class PlayerTest(unittest.TestCase):
+
+	
+
 
 	def test_double_down(self):
 		player = black_jack_classes.Player()
@@ -63,7 +101,7 @@ class PlayerTest(unittest.TestCase):
 		print(hand)
 
 		print("TEST MAKE MOVE ")
-		func_output = player.make_move(hand,deck)
+		func_output = player.make_move(deck, hand)
 
 if __name__ == '__main__':
 	unittest.main()
