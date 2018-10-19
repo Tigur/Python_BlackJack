@@ -52,6 +52,25 @@ class DeckTest(unittest.TestCase):
 		self.assertEqual(check_if_shuffled(deck), True)
 
 
+class HandTest(unittest.TestCase):
+	def test_update(self):
+
+		print("#"*30 + "\n" + "update_testing ..... ")
+
+		hand = black_jack_classes.Hand()
+		hand.cards = [8, 8]
+		hand.update_points()
+		print(hand)
+
+		hand.cards = ['A','A',5]
+		hand.update_points()
+
+		print(hand)
+
+		print("#"*30 + "\n")
+
+
+
 class PlayerTest(unittest.TestCase):
 
 	
@@ -97,6 +116,9 @@ class PlayerTest(unittest.TestCase):
 		#print(hand)
 		deck = black_jack_classes.Deck()
 		hand.cards = [8,8]
+
+		print ("LENGTH OF CARDS : {} \n".format(len(deck.cards)) )
+
 
 		print(hand)
 

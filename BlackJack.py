@@ -58,7 +58,7 @@ while not game_end:
 
 	for player in players_list : 
 		for hand in player.list_of_hands :
-			player.make_move(hand,deck)
+			player.make_move(deck,hand)
 
 
 	

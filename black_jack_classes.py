@@ -27,6 +27,8 @@ class Deck():
 		Function deletes returned card from deck.
 		"""
 
+		print(str(self.cards) + "\n KARTY \n")
+
 		top_card = self.cards[0]
 		self.cards.pop(0)
 		return top_card
@@ -43,7 +45,8 @@ class Hand():
 	def __init__(self):
 		self.cards = []
 
-		self.points = 0
+		self.points_hi = 0
+		self.points_lo = 0
 		self.is_busted = False
 		self.bet = 0
 		self.hit_limit_on = False
@@ -51,18 +54,41 @@ class Hand():
 	def __str__(self):
 
 		cards_str = str(self.cards)
-		points_str = str(self.points)
+		pointsHi_str = str(self.points_hi)
+		pointsLo_str = str(self.points_lo)
 		is_busted_str = str(self.is_busted)
 		bet_str = str(self.bet)
 		hit_limit_str = str(self.hit_limit_on)
 
 		print("CARDS : " + cards_str)
-		print("POINTS : " + points_str)
+		print("POINTS (high/low) : " + pointsHi_str +'/'+ pointsLo_str)
 		print("IS_BUSTED :" + is_busted_str)
 		print("BET : " + bet_str)
 		print("HIT_LIMIT : " + hit_limit_str)
 
 		return ''
+
+	def update_points_stats(self):
+		points_sum_hi = 0
+		points_sum_lo = 0
+		for card in self.cards : 
+			if isinstance(card, int):
+				points_sum_hi += card 
+				points_sum_lo += card 
+			elif card == 'A' :
+				points_sum_lo += 1
+				points_sum_hi += 11
+			else : 
+				points_sum_hi += 10
+				points_sum_lo += 10
+
+		self.points_hi = points_sum_hi
+		self.points_lo = points_sum_lo
+
+		if points_sum_lo > 21 : 
+			self.is_busted = True
+
+		return (self.points_hi, self.points_lo)
 
 
 
@@ -105,6 +131,7 @@ class GameParticipant():
 
 
 		hand.cards.append(deck.pop_top_card())
+		hand.update_points_stats()
 		return True
 
 	
@@ -122,7 +149,7 @@ class GameParticipant():
 				self.is_busted = True
 				return False
 
-		self.stay()
+		self.stand()
 		return True
 
 		
@@ -201,57 +228,62 @@ class Player(GameParticipant):
 		hand.cards.pop(0)
 		self.list_of_hands.append(new_hand) # LEN list of hands
 
+		hand.update_points_stats()
+		new_hand.update_points_stats()
+
 
 		return {self.list_of_hands[0].cards[0], self.list_of_hands[1].cards[0]}
 
 
-		def execute_move(self, choosen_move, hand, deck ):
-			if choosen_move == "hit":
-				hit(hand, deck)
-				return True
-			if choosen_move == "double down" :
-				double_down(hand)
-				return True
-			if choosen_move == "split" :
-				split(hand)
-				return True
+	def execute_move(self, choosen_move, hand, deck ):
+		if choosen_move == "hit":
+			self.hit(hand, deck)
+			return True
+		if choosen_move == "double down" :
+			self.double_down(hand)
+			return True
+		if choosen_move == "split" :
+			self.split(hand)
+			return True
 
-			return False
+		return False
 
 
-		def make_move(self, deck, hand): ####### NEED TO BE TESTED 
-			move_str = None # move place_holder (choosing)
+	def make_move(self, deck, hand): ####### NEED TO BE TESTED 
+		move_str = None # move place_holder (choosing)
 
-			player_possible_moves = {
+		# player_possible_moves = {
 
-				'stand' :  stand,
-				'hit' :  hit,
-				'double down' :  double_down,
-				'split':  split
+		# 	'stand' :  stand,
+		# 	'hit' :  hit,
+		# 	'double down' :  double_down,
+		# 	'split':  split
 		
 
 
-				}
-
-			while not move_str == 'stand':
-				while True :
-					move_str = input("")
-					try:
-						self.execute_move(move_str,hand, deck)
-						break
+		# 	}
 
 
-					except MovementFail:
-						print("There is something wrong ! Try again...") 
-						continue
+
+		while not move_str == 'stand':
+			while True :
+				move_str = input("")
+				try:
+					self.execute_move(move_str,hand, deck)
+					break
+
+
+				except MovementFail:
+					print("There is something wrong ! Try again...") 
+					continue
 
 
 
 
 
 		# Need to know : 
-			# can I return an exception ? It can be catched out of func 
-			# can I define self.money out of __init__ and it will be specific objec value ? NOPE
+			# can I return an exception ? It can be catched out of func  YUP
+			
 
 		# Need to be tested : 
 			# make_move
@@ -261,5 +293,7 @@ class Player(GameParticipant):
 
 		# features : 
 			# Deck shouldn't be passed
-			#
+			# points !
+
+
 
