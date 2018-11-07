@@ -85,7 +85,7 @@ class Hand():
 		self.points_hi = points_sum_hi
 		self.points_lo = points_sum_lo
 
-		if points_sum_lo > 21 : 
+		if points_sum_lo > 21 : # Change to new class
 			self.is_busted = True
 
 		return (self.points_hi, self.points_lo)
@@ -96,11 +96,12 @@ class Hand():
 
 
 
-class GameParticipant():
+class Participant():
 
 	"""
 	Class that models every participant of Black Jack game. 
-	Player and Croupiers alike.
+
+	Participant is a class modeling every human being involved in playing Black Jack. In this case : Players and Croupier
 
 	hand - This is a class containing info about hand status, points and 
 
@@ -143,9 +144,9 @@ class GameParticipant():
 		self.hit(initial_hand,deck)
 
 	def make_move(self, deck, hand):
-		while hand.points < 17 :
+		while hand.points_lo < 17 :
 			self.hit(hand,deck)
-			if hand.points > 21 :
+			if hand.points_lo > 21 :
 				self.is_busted = True
 				return False
 
@@ -154,7 +155,7 @@ class GameParticipant():
 
 		
 
-class Player(GameParticipant):
+class Player(Participant):
 
 	def __init__(self):
 		self.money = 10000 
@@ -178,10 +179,9 @@ class Player(GameParticipant):
 
 	def double_down(self, hand):
 		"""
-		# double the bet and may take only one hit
+		 func doubling the bet, after that may take only one hit, Return : bet on doubled hand
 
-		#if has only two cards then possible
-		#hand.doubled_down = True
+		double_down is possible only when len(hand.cards) == 2. 
 
 		INPUT: hand to double
 		OUTPUT: Amount of money after double
@@ -278,6 +278,14 @@ class Player(GameParticipant):
 					continue
 
 
+
+
+
+
+
+class Game():
+
+	def __init__(self):
 
 
 

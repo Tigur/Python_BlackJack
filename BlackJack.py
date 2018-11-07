@@ -28,6 +28,7 @@ This code represents logic of the Game.
 # TO DO LIST : 
 	# INIT 1 2 3 
 	# GAME LOOP 1 2 3 4 5 
+	# __str__ of "player" class | or "player" title
 
 # Additional features : 
 	# setting amount of money 
@@ -40,10 +41,10 @@ game_end = False
 players_number = raw_input("How many players will play ?")
 players_list = []
 
-for player in range(players_number):
-	players_list.append(black_jack_classes.Player())
+for player in range(players_number): 
+	players_list.append(black_jack_classes.Player()) # create players
 
-croupier = black_jack_classes.GameParticipant()
+croupier = black_jack_classes.Participant()
 deck = black_jack_classes.Deck()
 # HERE GAME LOOP 
 
@@ -59,6 +60,14 @@ while not game_end:
 	for player in players_list : 
 		for hand in player.list_of_hands :
 			player.make_move(deck,hand)
+
+	croupier.make_move(deck,croupier.list_of_hands[0])
+	
+
+	# check who wins
+	# manage money
+
+
 
 
 	

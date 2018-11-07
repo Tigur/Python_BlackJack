@@ -59,13 +59,30 @@ class HandTest(unittest.TestCase):
 
 		hand = black_jack_classes.Hand()
 		hand.cards = [8, 8]
-		hand.update_points()
+		func_output = hand.update_points_stats()
 		print(hand)
+
+		self.assertEqual(hand.points_hi, 16)
+		self.assertEqual(hand.points_lo, 16)
+		self.assertEqual(hand.is_busted, False)
 
 		hand.cards = ['A','A',5]
-		hand.update_points()
+		func_output = hand.update_points_stats()
 
 		print(hand)
+
+		self.assertEqual(hand.points_hi, 27)
+		self.assertEqual(hand.points_lo, 7)
+		self.assertEqual(hand.is_busted, False)
+
+		hand.cards = ['K','K',5]
+		func_output = hand.update_points_stats()
+
+		print(hand)
+
+		self.assertEqual(hand.points_hi, 25)
+		self.assertEqual(hand.points_lo, 25)
+		self.assertEqual(hand.is_busted, True)
 
 		print("#"*30 + "\n")
 
@@ -115,6 +132,7 @@ class PlayerTest(unittest.TestCase):
 		hand = player.list_of_hands[0]
 		#print(hand)
 		deck = black_jack_classes.Deck()
+		deck.shuffle()
 		hand.cards = [8,8]
 
 		print ("LENGTH OF CARDS : {} \n".format(len(deck.cards)) )
@@ -124,6 +142,38 @@ class PlayerTest(unittest.TestCase):
 
 		print("TEST MAKE MOVE ")
 		func_output = player.make_move(deck, hand)
+
+
+		print("="*50)
+		print("\n")
+		print("END RESULT OF MOVES : \n")
+		print("\n")
+
+
+		for hand in player.list_of_hands :
+			print("\n")
+			print(hand)
+			print("\n")
+
+		print('='*50)
+
+	def test_croupier_make_move(self):
+		print("%"*30 + " CROUPIER_MOVES !")
+
+
+		croupier = black_jack_classes.Participant()
+		deck = black_jack_classes.Deck()
+		deck.shuffle()
+		croupier.get_initial_hand(deck)
+		hand = croupier.list_of_hands[0]
+		func_output = croupier.make_move(deck,hand)
+
+		print(hand)
+
+		self.assertEqual(not hand.is_busted, func_output)
+
+		print("%"*30)
+
 
 if __name__ == '__main__':
 	unittest.main()
