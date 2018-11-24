@@ -1,0 +1,1 @@
+def player_init(money,hand,

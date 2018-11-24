@@ -47,7 +47,9 @@ class Hand():
 
 		self.points_hi = 0
 		self.points_lo = 0
+		self.preferable_points = 0
 		self.is_busted = False
+		self.hi_busted = False
 		self.bet = 0
 		self.hit_limit_on = False
 
@@ -85,10 +87,16 @@ class Hand():
 		self.points_hi = points_sum_hi
 		self.points_lo = points_sum_lo
 
+		if points_sum_hi > 21 :
+			self.hi_busted = True
+			self.preferable_points = points_sum_lo
+		else:
+			self.preferable_points = points_sum_hi
+
 		if points_sum_lo > 21 : # Change to new class
 			self.is_busted = True
 
-		return (self.points_hi, self.points_lo)
+		return (self.points_hi, self.points_lo, self.preferable_points)
 
 
 
@@ -286,22 +294,60 @@ class Player(Participant):
 class Game():
 
 	def __init__(self):
+		self.game_end = False
+		self.players_number = 0
+		self.all_players = []
+		self.croupier = Participant()
+		self.deck = Deck()
+
+	def init(self):
+		self.players_number = raw_input("How many players will play ?")
+		for player in range(players_number): 
+			all_players.append(Player()) # create players
+			self.deck.shuffle()
+
+	def kick_bancrupt_players(self):
+		self.all_players = [x for x in self.all_players if x.lost == False] # It should take all players that didn't lose.
+		if not self.all_players : 
+			self.game_end = True
 
 
 
-		# Need to know : 
-			# can I return an exception ? It can be catched out of func  YUP
-			
+	def prize_for(player,hand):
+		player.money += hand.bet
+		hand.bet = 0
 
-		# Need to be tested : 
-			# make_move
-			# get_initial_hand
-			# all of that exceptions and my new one 
+	def remove_bet(self,player,hand):
+		hand.bet = 0
+		if player.money == 0:
+			player.lost = True
+
+	def manage_bets_after_deal(self): # need to iterate through hand  | check who wins >> Give them prize stack, remove bet stack from all players
+		if self.croupier.is_busted: # IF Croupier busted >> prize all not-busted hands.
+			for player in all_players:	
+				for hand in player.list_of_hands:
+					if  not hand.is_busted:
+						prize_for(player,hand)
 
 
-		# features : 
-			# Deck shouldn't be passed
-			# points !
+
+		for player in all_players:
+			for hand in player.list_of_hands:
+				if not hand.is_busted and hand.preferable_points > croupier.preferable_points:
+					prize_for(player,hand)
+
+		for player in all_players: # Can be optimalised by rewriting in Hand Class
+			for hand in player.list_of_hands:
+				remove_bet(player,hand)
+
+
+
+
+
+
+
+		# NEW CLASS -->  "Game" with general rules functions
+		# test new functions !! (GAME CLASS)
 
 
 

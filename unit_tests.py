@@ -175,6 +175,12 @@ class PlayerTest(unittest.TestCase):
 		print("%"*30)
 
 
+
+class GameTest(unittest.TestCase): 
+	def test_prize_for(self):
+		
+
+
 if __name__ == '__main__':
 	unittest.main()
 

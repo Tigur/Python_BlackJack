@@ -37,35 +37,38 @@ This code represents logic of the Game.
 
 # --------------------------------------------------------------------------------------------------------
 
-game_end = False
-players_number = raw_input("How many players will play ?")
-players_list = []
+Game = black_jack_classes.Game()
 
-for player in range(players_number): 
-	players_list.append(black_jack_classes.Player()) # create players
 
-croupier = black_jack_classes.Participant()
-deck = black_jack_classes.Deck()
+
+
+
 # HERE GAME LOOP 
 
-while not game_end:
-	for player in players_list :
-		player.get_initial_hand(deck)
-	croupier.get_initial_hand(deck)
+while not Game.game_end:
+	for player in Game.all_players :
+		player.get_initial_hand(Game.deck)
+	Game.croupier.get_initial_hand(Game.deck)
 
 	# players ought to see first card in croupiers hand before their move
 
 	# players make move
 
-	for player in players_list : 
+	for player in all_players : 
 		for hand in player.list_of_hands :
-			player.make_move(deck,hand)
+			player.make_move(Game.deck,hand)
 
 	croupier.make_move(deck,croupier.list_of_hands[0])
 	
 
-	# check who wins
-	# manage money
+	# check who wins $$$$$ - probably done 
+	# manage money  $$$$   - probebly done 
+	
+	# giving player a steer.
+	# asking for player name and using it.  ++++++++++
+	# AI for computer. Based on tactics. ++++++++
+	# making some functions to write tests easly !!!!!!!
+	# Write tests for Game Class !!!!!
 
 
 
