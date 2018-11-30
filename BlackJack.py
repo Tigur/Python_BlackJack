@@ -52,6 +52,7 @@ Game.init()
 while not Game.game_end:
 	for player in Game.all_players :
 		player.get_initial_hand(Game.deck)
+		player.make_bet()
 	Game.croupier.get_initial_hand(Game.deck)
 
 	# players ought to see first card in croupiers hand before their move
@@ -71,6 +72,8 @@ while not Game.game_end:
 	Game.manage_bets_after_deal()
 	Game.clear_hands()
 	print("TABLE CLEARED !")
+	Game.kick_bancrupt_players()
+
 
 	if len(Game.deck.cards) < 25:
 		Game.deck.new_shuffled_deck()
@@ -86,6 +89,12 @@ while not Game.game_end:
 	# AI for computer. Based on tactics. ++++++++
 	# making some functions to write tests easly !!!!!!!
 	# Write tests for Game Class !!!!!
+
+if not Game.all_players :
+	print("ALL PLAYERS ARE BANCRUPT ! \n GAME OVER ! ")
+
+else : 
+	print("The Game has ended")
 
 
 

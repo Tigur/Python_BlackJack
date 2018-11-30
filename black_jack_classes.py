@@ -191,6 +191,7 @@ class Player(Participant):
 		self.money = 10000 
 		#self.is_busted = False
 		self.list_of_hands = []
+		self.lost = False
 	 
 
 
@@ -206,10 +207,21 @@ class Player(Participant):
 		print("\n")
 	
 
-	def initial_bet(self, bet):
-		if bet > self.money : 
-			print ( " Well, you can't bet this much money\n")
-			return False
+	def make_bet(self):
+		while(True):
+
+			bet = int(input("How much you want to bet ? \n"))
+
+			if self.money < bet:
+				print ( " ERROR : You don't have this much money ! \n")
+				continue
+			elif bet == 0:
+				print("You can't bet nothing !")
+				continue
+			else:
+				self.money -= bet
+				self.list_of_hands[0].bet = bet
+				return True
 
 
 		self.money = self.money - bet
@@ -346,7 +358,7 @@ class Game():
 
 
 	def prize_for(self,player,hand):
-		player.money += hand.bet 
+		player.money += 2*hand.bet 
 		hand.bet = 0
 
 		return player.money

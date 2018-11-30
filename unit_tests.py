@@ -5,6 +5,7 @@
 
 import unittest
 import black_jack_classes
+import func_for_unittest
 
 
 def check_if_shuffled(deck):
@@ -178,7 +179,14 @@ class PlayerTest(unittest.TestCase):
 
 class GameTest(unittest.TestCase): 
 	def test_prize_for(self):
+		player_initial_money = 1000
+		player_bet = 500
+		game = black_jack_classes.Game()
+		player = func_for_unittest.player_init( player_initial_money, [ hand.init(['A',8],player_bet) ] )
 		
+		output = game.prize_for(player,hand)
+
+		self.assertEqual(player_bet + player_initial_money, output)
 
 
 if __name__ == '__main__':
