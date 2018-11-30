@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 #BlackJack Game : CLASSES
 #By Nikodem Celiński 
 
@@ -27,11 +30,16 @@ class Deck():
 		Function deletes returned card from deck.
 		"""
 
-		print(str(self.cards) + "\n KARTY \n")
+		#print(str(self.cards) + "\n KARTY \n")
 
 		top_card = self.cards[0]
+		print("NEW CARD : " + str(top_card))
 		self.cards.pop(0)
 		return top_card
+
+	def new_shuffled_deck():
+		self.cards = possible_figures*4
+		self.shuffle()
 
 
 class Hand():
@@ -130,12 +138,21 @@ class Participant():
 	
 
 
+
+	def show_stats(self):
+		hand = self.list_of_hands[0]
+		print("Croupier : ")
+		print("Cards : " + str(hand.cards))
+		print('\n')
+
+
+
 	def stand(self):
 		pass
 
 	def hit(self, hand, deck):
 		if hand.hit_limit_on and len(hand.cards) > 2 : 
-			raise MovementFail('You could hit only once !!') # can I just return this exception ? 
+			raise MovementFail('You could hit only once !!') 
 			return False
 
 
@@ -145,7 +162,7 @@ class Participant():
 
 	
 
-	def get_initial_hand(self,deck): ####### NEED TO BE TESTED
+	def get_initial_hand(self,deck): 
 		self.list_of_hands.append(Hand())
 		initial_hand = self.list_of_hands[0]
 		self.hit(initial_hand,deck)
@@ -156,8 +173,10 @@ class Participant():
 			self.hit(hand,deck)
 			if hand.points_lo > 21 :
 				self.is_busted = True
+				self.show_stats()
 				return False
 
+		self.show_stats()
 		self.stand()
 		return True
 
@@ -165,21 +184,31 @@ class Participant():
 
 class Player(Participant):
 
+	
+
+
 	def __init__(self):
 		self.money = 10000 
-		self.is_busted = False
+		#self.is_busted = False
 		self.list_of_hands = []
 	 
 
 
 
-	
+	def show_stats(self):
+		for hand in self.list_of_hands:
+			print("Hand " + str(self.list_of_hands.index(hand)) + " :")
+			print("cards : " + str(hand.cards))
+			print("bet : " + str(hand.bet))
+			print("busted ? : " + str(hand.is_busted))
 
+		print("money : " + str(self.money))
+		print("\n")
 	
 
 	def initial_bet(self, bet):
 		if bet > self.money : 
-			print ( " Well, you can't bet this much money")
+			print ( " Well, you can't bet this much money\n")
 			return False
 
 
@@ -194,10 +223,10 @@ class Player(Participant):
 		INPUT: hand to double
 		OUTPUT: Amount of money after double
 		"""
-		print("DOUBLE_DOWN !!!!!!!!!!!!!")
+		print("DOUBLE_DOWN !!!!!!!!!!!!!\n")
 		print(hand)
 		if not len(hand.cards) == 2 :
-			raise MovementFail("you can't double with more than 2 cards !")
+			raise MovementFail("you can't double with more than 2 cards !\n")
 			return False #?? Will it run ?
 
 		hand.bet = hand.bet*2
@@ -217,12 +246,17 @@ class Player(Participant):
 
 		if not len(hand.cards)  == 2 :
 
-			print("Error, It might be an exception here !")
+			print("Error, It might be an exception here !\n")
+			return False
+
+		if not hand.cards[0] == hand.cards[1]:
+
+			print("Error : You can only split cards if you have pair !\n")
 			return False
 
 		if hand.bet > self.money:
 
-			print("You don't have enough money !")
+			print("You don't have enough money !\n")
 			return False
 
 		
@@ -253,37 +287,33 @@ class Player(Participant):
 		if choosen_move == "split" :
 			self.split(hand)
 			return True
+		if choosen_move == "status" :
+			self.show_stats()
 
 		return False
 
 
-	def make_move(self, deck, hand): ####### NEED TO BE TESTED 
+	def make_move(self, deck, hand): 
 		move_str = None # move place_holder (choosing)
 
-		# player_possible_moves = {
-
-		# 	'stand' :  stand,
-		# 	'hit' :  hit,
-		# 	'double down' :  double_down,
-		# 	'split':  split
-		
 
 
-		# 	}
-
-
-
-		while not move_str == 'stand':
+		while not ((move_str == 'stand') or (hand.is_busted)):
 			while True :
 				move_str = input("")
 				try:
 					self.execute_move(move_str,hand, deck)
+					print("\n")
+					self.show_stats()
 					break
 
 
 				except MovementFail:
-					print("There is something wrong ! Try again...") 
+					print("There is something wrong ! Try again... \n") 
 					continue
+
+		if hand.is_busted:
+			print("BUSTED !")
 
 
 
@@ -301,21 +331,25 @@ class Game():
 		self.deck = Deck()
 
 	def init(self):
-		self.players_number = raw_input("How many players will play ?")
-		for player in range(players_number): 
-			all_players.append(Player()) # create players
+		self.players_number = int(input("How many players will play ? \n"))
+		for player in range(self.players_number): 
+			self.all_players.append(Player()) # create players
 			self.deck.shuffle()
 
 	def kick_bancrupt_players(self):
-		self.all_players = [x for x in self.all_players if x.lost == False] # It should take all players that didn't lose.
+		self.all_players = [x for x in self.all_players if x.lost == False] # It  take all players that didn't lose.
 		if not self.all_players : 
 			self.game_end = True
 
+			return self.all_players
 
 
-	def prize_for(player,hand):
-		player.money += hand.bet
+
+	def prize_for(self,player,hand):
+		player.money += hand.bet 
 		hand.bet = 0
+
+		return player.money
 
 	def remove_bet(self,player,hand):
 		hand.bet = 0
@@ -324,21 +358,41 @@ class Game():
 
 	def manage_bets_after_deal(self): # need to iterate through hand  | check who wins >> Give them prize stack, remove bet stack from all players
 		if self.croupier.is_busted: # IF Croupier busted >> prize all not-busted hands.
-			for player in all_players:	
+			for player in self.all_players:	
 				for hand in player.list_of_hands:
 					if  not hand.is_busted:
-						prize_for(player,hand)
+						self.prize_for(player,hand)
+						print("player " + str(self.all_players.index(player)) + " WON")
 
 
 
-		for player in all_players:
+		for player in self.all_players:
 			for hand in player.list_of_hands:
-				if not hand.is_busted and hand.preferable_points > croupier.preferable_points:
-					prize_for(player,hand)
+				if not hand.is_busted and hand.preferable_points > self.croupier.list_of_hands[0].preferable_points:
+					self.prize_for(player,hand)
+					print("player " + str(self.all_players.index(player)) + " WON")
 
-		for player in all_players: # Can be optimalised by rewriting in Hand Class
+		for player in self.all_players: # Can be optimalised by rewriting in Hand Class
 			for hand in player.list_of_hands:
-				remove_bet(player,hand)
+				self.remove_bet(player,hand)
+
+	def show_table(self):
+		print('CROUPIER : ')
+		print( "card : " + str(self.croupier.list_of_hands[0].cards[0]) + '\n\n')
+
+		
+
+		for player in self.all_players:
+			print('player  ' + str(self.all_players.index(player)) + ' :' )
+			for hand in player.list_of_hands:
+				print( "hand " +  str(player.list_of_hands.index(hand)) + ' :'  + str(hand.cards) )
+
+	def clear_hands(self):
+		for player in self.all_players:
+			player.list_of_hands = []
+
+		self.croupier.list_of_hands = []
+
 
 
 

@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 #BlackJack Game : Exceptions
 #By Nikodem Celiński 
 

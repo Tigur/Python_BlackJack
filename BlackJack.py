@@ -1,4 +1,8 @@
-#BlackJack Game 
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+
+# BlackJack Game 
 # By Nikodem Celiński 
 
 # file created : 12:50 | 18.09.18 
@@ -42,7 +46,7 @@ Game = black_jack_classes.Game()
 
 
 
-
+Game.init()
 # HERE GAME LOOP 
 
 while not Game.game_end:
@@ -53,17 +57,30 @@ while not Game.game_end:
 	# players ought to see first card in croupiers hand before their move
 
 	# players make move
+	Game.show_table()
 
-	for player in all_players : 
+	for player in Game.all_players : 
 		for hand in player.list_of_hands :
 			player.make_move(Game.deck,hand)
+			#player.show_stats()
 
-	croupier.make_move(deck,croupier.list_of_hands[0])
+	#print ("THESE WERE PLAYERSSS ------------------------")
+	Game.croupier.make_move(Game.deck, Game.croupier.list_of_hands[0])
+	#print("THIS WAS CROUPIER **************************************")
+
+	Game.manage_bets_after_deal()
+	Game.clear_hands()
+	print("TABLE CLEARED !")
+
+	if len(Game.deck.cards) < 25:
+		Game.deck.new_shuffled_deck()
+		print("\n Hey, That's a new DECK ! \n")
+
 	
 
 	# check who wins $$$$$ - probably done 
-	# manage money  $$$$   - probebly done 
-	
+	# manage money  $$$$   - probebly done 11
+
 	# giving player a steer.
 	# asking for player name and using it.  ++++++++++
 	# AI for computer. Based on tactics. ++++++++
