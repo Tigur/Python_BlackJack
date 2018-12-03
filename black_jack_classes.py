@@ -301,12 +301,13 @@ class Player(Participant):
 			return True
 		if choosen_move == "status" :
 			self.show_stats()
+			return True
 
 		return False
 
 
 	def make_move(self, deck, hand): 
-		move_str = None # move place_holder (choosing)
+		move_str = '' # move place_holder (choosing)
 
 
 
@@ -389,8 +390,37 @@ class Game():
 				self.remove_bet(player,hand)
 
 	def show_table(self):
+		def player_labels(self):
+			
+			for player in self.all_players: 
+				index = self.all_players.index(player)
+				player_labels += "player " + str(index) + ' :' #10 size
+				money_string += "money : " + str(player.money) #20 size
+
+			for index in range(5):	
+				for player in self.all_players: 
+					hands_cards_string += "hand " + str(index) +' : ' + str(player.list_of_hands[index].cards + ' | ' + str(player.list_of_hands[index].bet)) # generator needed ?  
+
+
+
+
+			return player_labels 
+
+		
+
+
+
+
+
+
+
 		print('CROUPIER : ')
-		print( "card : " + str(self.croupier.list_of_hands[0].cards[0]) + '\n\n')
+		print( "cards : " + str(self.croupier.list_of_hands[0].cards) + '\n\n')
+
+		print('\n')
+
+		
+
 
 		
 

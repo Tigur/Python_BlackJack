@@ -81,21 +81,17 @@ while not Game.game_end:
 
 	
 
-	# check who wins $$$$$ - probably done 
-	# manage money  $$$$   - probebly done 11
-
-	# giving player a steer.
-	# asking for player name and using it.  ++++++++++
-	# AI for computer. Based on tactics. ++++++++
-	# making some functions to write tests easly !!!!!!!
-	# Write tests for Game Class !!!!!
-
 if not Game.all_players :
 	print("ALL PLAYERS ARE BANCRUPT ! \n GAME OVER ! ")
 
 else : 
 	print("The Game has ended")
 
+
+
+# NEED TO BE DONE : 
+
+	#1. Make UI somewhat clear and readable 
 
 
 
