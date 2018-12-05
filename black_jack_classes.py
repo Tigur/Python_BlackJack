@@ -338,7 +338,7 @@ class Game():
 
 	def __init__(self):
 		self.game_end = False
-		self.players_number = 0
+		self.players_number = 0 #should be "Quantity"
 		self.all_players = []
 		self.croupier = Participant()
 		self.deck = Deck()
@@ -389,22 +389,65 @@ class Game():
 			for hand in player.list_of_hands:
 				self.remove_bet(player,hand)
 
-	def show_table(self):
-		def player_labels(self):
+	def show_table(self,active_player ,active_hand ): # make those last two fairly optional
+		def player_labels(): #constructing the output line by line
+			spacingg = 30
+
+			active_player_index = self.all_players.index(active_player)
+			active_hand_index = active_player.list_of_hands.index(active_hand)
+
+			player_labels = ''
+			money_string = ''
+			hands_cards_string = ''
+			indicator = '>>' #indicator
 			
 			for player in self.all_players: 
 				index = self.all_players.index(player)
-				player_labels += "player " + str(index) + ' :' #10 size
-				money_string += "money : " + str(player.money) #20 size
 
-			for index in range(5):	
+				
+				if active_player_index == index :
+					current_string_players = indicator + "player " + str(index) + ' :'
+				else:
+					current_string_players = "player " + str(index) + ' :'
+
+				player_labels += '{:<{spacing}}'.format(current_string_players, spacing = spacingg)
+				current_string_money = "money : " + str(player.money)
+				money_string += '{:<{spacing}}'.format(current_string_money, spacing = spacingg)
+
+				player_labels = '{:<{spacing}}'.format(player_labels, spacing = spacingg)
+				money_string = '{:<{spacing}}'.format(money_string, spacing = spacingg)
+
+				count_of_hands = []
+				count_of_hands.append(len(player.list_of_hands))
+				max_number_of_hands = max(count_of_hands)
+
+			for hand_index in range(max_number_of_hands):	
 				for player in self.all_players: 
-					hands_cards_string += "hand " + str(index) +' : ' + str(player.list_of_hands[index].cards + ' | ' + str(player.list_of_hands[index].bet)) # generator needed ?  
+
+					player_index = self.all_players.index(player)
+
+					if active_hand_index == hand_index and active_hand_index == player_index :
+						current_string_hands = indicator + "hand " + str(hand_index) +' : ' + str(player.list_of_hands[hand_index].cards) + ' | ' + str(player.list_of_hands[hand_index].bet)
+					else:
+						current_string_hands = "hand " + str(hand_index) +' : ' + str(player.list_of_hands[hand_index].cards) + ' | ' + str(player.list_of_hands[hand_index].bet)
+
+
+					#current_string_hands = "hand " + str(index) +' : ' + str(player.list_of_hands[index].cards) + ' | ' + str(player.list_of_hands[index].bet)
+					hands_cards_string += '{:<{spacing}}'.format(current_string_hands, spacing = spacingg) # generator needed ?  
+					hands_cards_string = '{:<{spacing}}'.format(hands_cards_string, spacing = spacingg)
+
+				hands_cards_string += '\n'
+
+
+			#player_labels = '{:<50}'.format(player_labels)
+			#money_string = '{:<50}'.format(money_string)
+			#hands_cards_string = '{:<50}'.format(hands_cards_string)
+			
+			lines_dict = {'players':player_labels, 'money':money_string, 'hands':hands_cards_string }
 
 
 
-
-			return player_labels 
+			return lines_dict
 
 		
 
@@ -414,20 +457,34 @@ class Game():
 
 
 
-		print('CROUPIER : ')
-		print( "cards : " + str(self.croupier.list_of_hands[0].cards) + '\n\n')
+		#print('CROUPIER : ')
+		#print( "cards : " + str(self.croupier.list_of_hands[0].cards) + '\n\n')
 
-		print('\n')
-
-		
-
+		#print('\n')
 
 		
 
-		for player in self.all_players:
-			print('player  ' + str(self.all_players.index(player)) + ' :' )
-			for hand in player.list_of_hands:
-				print( "hand " +  str(player.list_of_hands.index(hand)) + ' :'  + str(hand.cards) )
+
+		
+
+		#for player in self.all_players:
+		#	print('player  ' + str(self.all_players.index(player)) + ' :' )
+		#	for hand in player.list_of_hands:
+		#		print( "hand " +  str(player.list_of_hands.index(hand)) + ' :'  + str(hand.cards) )
+
+
+		print('\n' + 20*'*')
+		print("{:^20}".format('TABLE'))
+		print(" Croupier : ")
+		print("Cards : " + str(self.croupier.list_of_hands[0].cards))
+		print('\n\n')
+
+
+		print(player_labels()['players'])
+		print(player_labels()['money']) 
+		print(player_labels()['hands'])
+
+		print('\n\n')
 
 	def clear_hands(self):
 		for player in self.all_players:
