@@ -315,9 +315,11 @@ class Player(Participant):
 			while True :
 				move_str = input("")
 				try:
+
 					self.execute_move(move_str,hand, deck)
 					print("\n")
 					game.show_table(self, hand)
+					
 					break
 
 
@@ -426,7 +428,7 @@ class Game():
 
 					player_index = self.all_players.index(player)
 
-					if active_hand_index == hand_index and active_hand_index == player_index :
+					if active_hand_index == hand_index and active_player_index == player_index :
 						current_string_hands = indicator + "hand " + str(hand_index) +' : ' + str(player.list_of_hands[hand_index].cards) + ' | ' + str(player.list_of_hands[hand_index].bet)
 					else:
 						current_string_hands = "hand " + str(hand_index) +' : ' + str(player.list_of_hands[hand_index].cards) + ' | ' + str(player.list_of_hands[hand_index].bet)

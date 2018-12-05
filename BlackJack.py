@@ -58,10 +58,11 @@ while not Game.game_end:
 	# players ought to see first card in croupiers hand before their move
 
 	# players make move
-	Game.show_table(Game.all_players[0],Game.all_players[0].list_of_hands[0])
+	#Game.show_table(Game.all_players[0],Game.all_players[0].list_of_hands[0])
 
 	for player in Game.all_players : 
 		for hand in player.list_of_hands :
+			Game.show_table(player,hand)
 			player.make_move(Game.deck,hand, Game)
 			#player.show_stats()
 
