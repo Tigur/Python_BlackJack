@@ -62,7 +62,7 @@ while not Game.game_end:
 
 	for player in Game.all_players : 
 		for hand in player.list_of_hands :
-			player.make_move(Game.deck,hand)
+			player.make_move(Game.deck,hand, Game)
 			#player.show_stats()
 
 	#print ("THESE WERE PLAYERSSS ------------------------")

@@ -306,7 +306,7 @@ class Player(Participant):
 		return False
 
 
-	def make_move(self, deck, hand): 
+	def make_move(self, deck, hand, game): 
 		move_str = '' # move place_holder (choosing)
 
 
@@ -317,7 +317,7 @@ class Player(Participant):
 				try:
 					self.execute_move(move_str,hand, deck)
 					print("\n")
-					self.show_stats()
+					game.show_table(self, hand)
 					break
 
 
@@ -391,7 +391,7 @@ class Game():
 
 	def show_table(self,active_player ,active_hand ): # make those last two fairly optional
 		def player_labels(): #constructing the output line by line
-			spacingg = 30
+			spacingg = 50
 
 			active_player_index = self.all_players.index(active_player)
 			active_hand_index = active_player.list_of_hands.index(active_hand)
@@ -432,16 +432,11 @@ class Game():
 						current_string_hands = "hand " + str(hand_index) +' : ' + str(player.list_of_hands[hand_index].cards) + ' | ' + str(player.list_of_hands[hand_index].bet)
 
 
-					#current_string_hands = "hand " + str(index) +' : ' + str(player.list_of_hands[index].cards) + ' | ' + str(player.list_of_hands[index].bet)
+					
 					hands_cards_string += '{:<{spacing}}'.format(current_string_hands, spacing = spacingg) # generator needed ?  
 					hands_cards_string = '{:<{spacing}}'.format(hands_cards_string, spacing = spacingg)
 
 				hands_cards_string += '\n'
-
-
-			#player_labels = '{:<50}'.format(player_labels)
-			#money_string = '{:<50}'.format(money_string)
-			#hands_cards_string = '{:<50}'.format(hands_cards_string)
 			
 			lines_dict = {'players':player_labels, 'money':money_string, 'hands':hands_cards_string }
 
@@ -449,28 +444,7 @@ class Game():
 
 			return lines_dict
 
-		
 
-
-
-
-
-
-
-		#print('CROUPIER : ')
-		#print( "cards : " + str(self.croupier.list_of_hands[0].cards) + '\n\n')
-
-		#print('\n')
-
-		
-
-
-		
-
-		#for player in self.all_players:
-		#	print('player  ' + str(self.all_players.index(player)) + ' :' )
-		#	for hand in player.list_of_hands:
-		#		print( "hand " +  str(player.list_of_hands.index(hand)) + ' :'  + str(hand.cards) )
 
 
 		print('\n' + 20*'*')
