@@ -14,32 +14,7 @@ import black_jack_classes
 This code represents logic of the Game.
 
 """
-# -------------------------------------------------------------------------------------------------------
 
-# INIT : 
-	# deck
-	# players
-	# croupier
-
-# GAME LOOP :
-	# round begining
-	# each player does a move (after each check if busted)
-	# croupier does a move (check if busted)
-	# declare wins/loses and manage money
-	# Check if it's over for every player, If not - >>NEXT ROUND (LOOP)<<
-
-
-# TO DO LIST : 
-	# INIT 1 2 3 
-	# GAME LOOP 1 2 3 4 5 
-	# __str__ of "player" class | or "player" title
-
-# Additional features : 
-	# setting amount of money 
-
-
-
-# --------------------------------------------------------------------------------------------------------
 
 Game = black_jack_classes.Game()
 
@@ -52,7 +27,7 @@ Game.init()
 while not Game.game_end:
 	for player in Game.all_players :
 		player.get_initial_hand(Game.deck)
-		player.make_bet()
+		player.make_bet( Game.all_players.index(player))
 	Game.croupier.get_initial_hand(Game.deck)
 
 	# players ought to see first card in croupiers hand before their move

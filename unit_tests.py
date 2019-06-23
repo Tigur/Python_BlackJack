@@ -5,7 +5,7 @@
 
 import unittest
 import black_jack_classes
-import func_for_unittest
+import func_for_unittest 
 
 
 def check_if_shuffled(deck):
@@ -128,21 +128,27 @@ class PlayerTest(unittest.TestCase):
 		self.assertEqual(len(player2.list_of_hands), 2)
 
 	def test_make_move(self):
+
+		game = black_jack_classes.Game()
 		player = black_jack_classes.Player()
 		player.list_of_hands.append(black_jack_classes.Hand())
-		hand = player.list_of_hands[0]
-		#print(hand)
-		deck = black_jack_classes.Deck()
-		deck.shuffle()
+		
+
+		game.all_players.append(player)
+		hand = game.all_players[0].list_of_hands[0]
+		game.croupier = func_for_unittest.croupier_init(game, ['D',9])
+		
+		
+		
 		hand.cards = [8,8]
 
-		print ("LENGTH OF CARDS : {} \n".format(len(deck.cards)) )
+		print ("LENGTH OF CARDS : {} \n".format(len(game.deck.cards)) )
 
 
 		print(hand)
 
 		print("TEST MAKE MOVE ")
-		func_output = player.make_move(deck, hand)
+		func_output = player.make_move(game.deck, hand, game)
 
 
 		print("="*50)
@@ -182,11 +188,35 @@ class GameTest(unittest.TestCase):
 		player_initial_money = 1000
 		player_bet = 500
 		game = black_jack_classes.Game()
-		player = func_for_unittest.player_init( player_initial_money, [ hand.init(['A',8],player_bet) ] )
+		player = func_for_unittest.player_init( player_initial_money, [ func_for_unittest.hand_init(['A',8],player_bet) ] )
 		
-		output = game.prize_for(player,hand)
+		output = game.prize_for(player,player.list_of_hands[0])
 
-		self.assertEqual(player_bet + player_initial_money, output)
+		self.assertEqual(player_bet*2 + player_initial_money, output)
+
+ 
+	def test_show_table(self):  
+		game = black_jack_classes.Game()
+		deck = black_jack_classes.Deck()
+		hand_p8 = func_for_unittest.hand_init([8,8],0)
+		hand_p9 = func_for_unittest.hand_init([9,9],0)
+		
+
+
+		croupier = func_for_unittest.croupier_init(game,['D',10])
+		player_9 = func_for_unittest.player_init(300,[hand_p9])
+		player_8 = func_for_unittest.player_init(300,[hand_p8])
+
+		game.all_players.append(player_8)
+		game.all_players.append(player_9)
+
+		player_8.make_move(deck, player_8.list_of_hands[0], game)
+
+		game.show_table(game.all_players[0], game.all_players[0].list_of_hands[0]) # Are those args different objects ? 
+
+
+
+
 
 
 if __name__ == '__main__':

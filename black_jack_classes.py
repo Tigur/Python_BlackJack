@@ -9,6 +9,7 @@
 
 import random
 from bj_exceptions import MovementFail 
+from subprocess import call
 
 class Deck():
 
@@ -33,11 +34,11 @@ class Deck():
 		#print(str(self.cards) + "\n KARTY \n")
 
 		top_card = self.cards[0]
-		print("NEW CARD : " + str(top_card))
+		#print("NEW CARD : " + str(top_card))
 		self.cards.pop(0)
 		return top_card
 
-	def new_shuffled_deck():
+	def new_shuffled_deck(self):
 		self.cards = possible_figures*4
 		self.shuffle()
 
@@ -207,10 +208,10 @@ class Player(Participant):
 		print("\n")
 	
 
-	def make_bet(self):
+	def make_bet(self, player_index):
 		while(True):
 
-			bet = int(input("How much you want to bet ? \n"))
+			bet = int(input("player {} How much do you want to bet ? \n".format(player_index)))
 
 			if self.money < bet:
 				print ( " ERROR : You don't have this much money ! \n")
@@ -313,10 +314,11 @@ class Player(Participant):
 
 		while not ((move_str == 'stand') or (hand.is_busted)):
 			while True :
-				move_str = input("")
+				move_str = input("Your move ? \n")
 				try:
 
 					self.execute_move(move_str,hand, deck)
+					call(['clear'])
 					print("\n")
 					game.show_table(self, hand)
 					
@@ -329,6 +331,9 @@ class Player(Participant):
 
 		if hand.is_busted:
 			print("BUSTED !")
+
+		game.press_enter()
+		call(['clear'])
 
 
 
@@ -402,6 +407,8 @@ class Game():
 			money_string = ''
 			hands_cards_string = ''
 			indicator = '>>' #indicator
+
+			count_of_hands = [] # how many hands have each  player ? 
 			
 			for player in self.all_players: 
 				index = self.all_players.index(player)
@@ -419,9 +426,11 @@ class Game():
 				player_labels = '{:<{spacing}}'.format(player_labels, spacing = spacingg)
 				money_string = '{:<{spacing}}'.format(money_string, spacing = spacingg)
 
-				count_of_hands = []
+				
 				count_of_hands.append(len(player.list_of_hands))
 				max_number_of_hands = max(count_of_hands)
+
+				print(max_number_of_hands) # DEBUUUUUGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG 
 
 			for hand_index in range(max_number_of_hands):	
 				for player in self.all_players: 
@@ -430,7 +439,8 @@ class Game():
 
 					if active_hand_index == hand_index and active_player_index == player_index :
 						current_string_hands = indicator + "hand " + str(hand_index) +' : ' + str(player.list_of_hands[hand_index].cards) + ' | ' + str(player.list_of_hands[hand_index].bet)
-					else:
+					else:# len(player.list_of_hands) >= hand_index:
+						
 						current_string_hands = "hand " + str(hand_index) +' : ' + str(player.list_of_hands[hand_index].cards) + ' | ' + str(player.list_of_hands[hand_index].bet)
 
 
@@ -461,6 +471,10 @@ class Game():
 		print(player_labels()['hands'])
 
 		print('\n\n')
+
+
+	def press_enter(self):
+		any_input = input("{:^60}".format('========  PRESS ENTER  ========='))
 
 	def clear_hands(self):
 		for player in self.all_players:
