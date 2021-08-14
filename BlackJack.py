@@ -9,6 +9,7 @@
 
 
 import black_jack_classes
+import other_func
 
 """
 This code represents logic of the Game.
@@ -38,6 +39,7 @@ while not Game.game_end:
 	for player in Game.all_players : 
 		for hand in player.list_of_hands :
 			Game.show_table(player,hand)
+			other_func.show_help()
 			player.make_move(Game.deck,hand, Game)
 			#player.show_stats()
 
